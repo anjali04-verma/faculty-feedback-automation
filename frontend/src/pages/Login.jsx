@@ -226,6 +226,14 @@ function Login() {
                   </button>
                 </div>
               </div>
+              <div className="text-right">
+  <Link
+    to="/forgot-password"
+    className="text-sm text-blue-600 hover:underline"
+  >
+    Forgot Password?
+  </Link>
+</div>
 
               {/* Role Selection */}
               <div>

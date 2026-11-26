@@ -1,7 +1,6 @@
-
 import { createContext, useContext, useState } from "react";
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 const demoUsers = [
   {
@@ -26,15 +25,78 @@ const demoUsers = [
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    return JSON.parse(localStorage.getItem("user")) || null;
+    try {
+      return JSON.parse(localStorage.getItem("user")) || null;
+    } catch {
+      return null;
+    }
   });
 
-const login = (email, password, selectedRole) => {
-  const found = demoUsers.find(
-    (u) =>
-      u.email === email &&
-      u.password === password &&
-      u.role === selectedRole
+  const register = (name, email, password, role) => {
+    const normalizedEmail = email.trim().toLowerCase();
+
+    let registeredUsers = [];
+
+    try {
+      registeredUsers = JSON.parse(
+        localStorage.getItem("users") || "[]"
+      );
+      if (!Array.isArray(registeredUsers)) registeredUsers = [];
+    } catch {
+      registeredUsers = [];
+    }
+
+    const allUsers = [...demoUsers, ...registeredUsers];
+
+    const exists = allUsers.some(
+      u => u.email?.trim().toLowerCase() === normalizedEmail
+    );
+
+    if (exists) {
+      return {
+        success: false,
+        message: "Account already exists."
+      };
+    }
+
+    registeredUsers.push({
+      name: name.trim(),
+      email: normalizedEmail,
+      password,
+      role
+    });
+
+    localStorage.setItem("users", JSON.stringify(registeredUsers));
+
+    return { success: true };
+  };
+
+ const login = (identifier, password, selectedRole) => {
+  const normalizedIdentifier = identifier.trim().toLowerCase();
+
+  let registeredUsers = [];
+
+  try {
+    registeredUsers = JSON.parse(
+      localStorage.getItem("users") || "[]"
+    );
+
+    if (!Array.isArray(registeredUsers)) {
+      registeredUsers = [];
+    }
+  } catch {
+    registeredUsers = [];
+  }
+
+  const allUsers = [...demoUsers, ...registeredUsers];
+
+  const found = allUsers.find(u =>
+    (
+      u.email?.trim().toLowerCase() === normalizedIdentifier ||
+      u.name?.trim().toLowerCase() === normalizedIdentifier
+    ) &&
+    u.password === password &&
+    u.role === selectedRole
   );
 
   if (!found) return null;
@@ -50,14 +112,13 @@ const login = (email, password, selectedRole) => {
 
   return found.role;
 };
-
   const logout = () => {
     localStorage.removeItem("user");
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
