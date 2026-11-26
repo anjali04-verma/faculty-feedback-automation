@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
-
+import SettingsPanel from "../context/SettingsPanel";
 function StudentDashboard() {
   useEffect(() => {
   const updateFacultyList = () => {
@@ -369,11 +369,12 @@ const submitFeedback = (e) => {
 
       case "Settings":
         return (
-          <>
-            <h1 className="text-3xl font-bold dark:text-white mb-2">Settings</h1>
-            <p className="text-slate-500 mb-8">Customize your dashboard appearance.</p>
-            <ThemeSettings theme={theme} setTheme={setTheme} />
-          </>
+          <SettingsPanel
+      theme={theme}
+      setTheme={setTheme}
+      user={user}
+      role="Student"
+    />
         );
 
       default:

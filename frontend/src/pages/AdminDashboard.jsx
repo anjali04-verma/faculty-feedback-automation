@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, Users, GraduationCap, ClipboardList,
   ChartColumn, Settings, LogOut, UserPlus, Search,
-  Trash2, User, Moon, Sun, Monitor, X
+  Trash2, User, X
 } from "lucide-react";
+
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
+import SettingsPanel from "../context/SettingsPanel";
 
 function AdminDashboard() {
   const { user, logout } = useAuth();
@@ -42,11 +44,22 @@ function AdminDashboard() {
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState("student");
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     department: ""
   });
+
+  const menuItems = [
+    { name: "Dashboard", icon: LayoutDashboard },
+    { name: "Manage Students", icon: Users },
+    { name: "Manage Faculty", icon: GraduationCap },
+    { name: "Feedback Management", icon: ClipboardList },
+    { name: "Reports & Analytics", icon: ChartColumn },
+    { name: "My Profile", icon: User },
+    { name: "Settings", icon: Settings }
+  ];
 
   useEffect(() => {
     localStorage.setItem("adminStudents", JSON.stringify(students));
@@ -68,16 +81,6 @@ function AdminDashboard() {
   useEffect(() => {
     loadFeedbacks();
   }, []);
-
-  const menuItems = [
-    { name: "Dashboard", icon: LayoutDashboard },
-    { name: "Manage Students", icon: Users },
-    { name: "Manage Faculty", icon: GraduationCap },
-    { name: "Feedback Management", icon: ClipboardList },
-    { name: "Reports & Analytics", icon: ChartColumn },
-    { name: "My Profile", icon: User },
-    { name: "Settings", icon: Settings }
-  ];
 
   const handleLogout = () => {
     logout();
@@ -126,7 +129,10 @@ function AdminDashboard() {
 
   const renderDashboard = () => (
     <>
-      <h1 className="text-3xl font-bold dark:text-white">Admin Dashboard</h1>
+      <h1 className="text-3xl font-bold dark:text-white">
+        Admin Dashboard
+      </h1>
+
       <p className="text-slate-500 mt-2 mb-8">
         Welcome back, {user?.name || "Admin"}! Manage your feedback system.
       </p>
@@ -142,6 +148,7 @@ function AdminDashboard() {
         <h2 className="text-xl font-bold dark:text-white mb-3">
           Recent Feedback
         </h2>
+
         {feedbacks.length === 0 ? (
           <p className="text-slate-500">No feedback submitted yet.</p>
         ) : (
@@ -179,6 +186,7 @@ function AdminDashboard() {
               Add, search and manage records.
             </p>
           </div>
+
           <button
             onClick={() => openAddForm(type)}
             className="flex items-center gap-2 bg-blue-600 text-white px-5 py-3 rounded-lg"
@@ -205,13 +213,19 @@ function AdminDashboard() {
                 <tr className="border-b dark:border-slate-700 text-slate-500">
                   <th className="p-3">Name</th>
                   <th className="p-3">Email</th>
-                  <th className="p-3">{isStudent ? "Branch" : "Department"}</th>
+                  <th className="p-3">
+                    {isStudent ? "Branch" : "Department"}
+                  </th>
                   <th className="p-3">Action</th>
                 </tr>
               </thead>
+
               <tbody>
                 {filtered.map(item => (
-                  <tr key={item.id} className="border-b dark:border-slate-700 dark:text-white">
+                  <tr
+                    key={item.id}
+                    className="border-b dark:border-slate-700 dark:text-white"
+                  >
                     <td className="p-3">{item.name}</td>
                     <td className="p-3">{item.email}</td>
                     <td className="p-3">
@@ -227,6 +241,7 @@ function AdminDashboard() {
                     </td>
                   </tr>
                 ))}
+
                 {filtered.length === 0 && (
                   <tr>
                     <td colSpan="4" className="p-5 text-center text-slate-500">
@@ -253,6 +268,7 @@ function AdminDashboard() {
             View all student feedback submissions.
           </p>
         </div>
+
         <button
           onClick={loadFeedbacks}
           className="bg-blue-600 text-white px-5 py-2 rounded-lg"
@@ -275,9 +291,11 @@ function AdminDashboard() {
                 <h3 className="font-bold dark:text-white">
                   Faculty: {item.faculty}
                 </h3>
+
                 <p className="text-sm text-slate-500 mt-1">
                   Student: {item.anonymous ? "Anonymous" : item.studentName || "Student"}
                 </p>
+
                 <p className="text-sm text-slate-500">Date: {item.date}</p>
 
                 <div className="mt-3 dark:text-white">
@@ -346,6 +364,7 @@ function AdminDashboard() {
           <h2 className="text-xl font-bold dark:text-white mb-5">
             Faculty-wise Feedback Summary
           </h2>
+
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
@@ -355,9 +374,13 @@ function AdminDashboard() {
                   <th className="p-3">Average Rating</th>
                 </tr>
               </thead>
+
               <tbody>
                 {facultySummary.map(item => (
-                  <tr key={item.id} className="border-b dark:border-slate-700 dark:text-white">
+                  <tr
+                    key={item.id}
+                    className="border-b dark:border-slate-700 dark:text-white"
+                  >
                     <td className="p-3">{item.name}</td>
                     <td className="p-3">{item.count}</td>
                     <td className="p-3">{item.average}/5</td>
@@ -373,12 +396,16 @@ function AdminDashboard() {
 
   const renderProfile = () => (
     <>
-      <h1 className="text-3xl font-bold dark:text-white mb-6">My Profile</h1>
+      <h1 className="text-3xl font-bold dark:text-white mb-6">
+        My Profile
+      </h1>
+
       <div className="bg-white dark:bg-slate-900 rounded-2xl shadow p-8 max-w-3xl">
         <div className="flex items-center gap-4 mb-8">
           <div className="w-20 h-20 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center">
             <User size={40} className="text-blue-600" />
           </div>
+
           <div>
             <h2 className="text-2xl font-bold dark:text-white">
               {user?.name || "Admin"}
@@ -386,6 +413,7 @@ function AdminDashboard() {
             <p className="text-blue-600">Administrator</p>
           </div>
         </div>
+
         <ProfileField label="Full Name" value={user?.name || "Admin"} />
         <ProfileField label="Email Address" value={user?.email || "admin@gmail.com"} />
         <ProfileField label="Account Role" value="Admin" />
@@ -393,52 +421,36 @@ function AdminDashboard() {
     </>
   );
 
+  // Updated Settings Panel
   const renderSettings = () => (
-    <>
-      <h1 className="text-3xl font-bold dark:text-white mb-3">Settings</h1>
-      <p className="text-slate-500 mb-8">Customize your dashboard appearance.</p>
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow p-7">
-        <h2 className="font-bold dark:text-white mb-5">Appearance</h2>
-        <div className="grid md:grid-cols-3 gap-4">
-          {[
-            { value: "light", label: "Light Mode", icon: Sun },
-            { value: "dark", label: "Dark Mode", icon: Moon },
-            { value: "system", label: "System Default", icon: Monitor }
-          ].map(item => {
-            const Icon = item.icon;
-            return (
-              <button
-                key={item.value}
-                onClick={() => setTheme(item.value)}
-                className={`border rounded-xl p-5 flex flex-col items-center gap-3 dark:text-white ${
-                  theme === item.value
-                    ? "border-blue-600 bg-blue-50 dark:bg-blue-900/30"
-                    : "border-slate-200 dark:border-slate-700"
-                }`}
-              >
-                <Icon className="text-blue-600" size={28} />
-                {item.label}
-                {theme === item.value && (
-                  <span className="text-xs text-blue-600">Selected</span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </>
+    <div className="mt-8">
+      <SettingsPanel
+        theme={theme}
+        setTheme={setTheme}
+        user={user}
+        role="Admin"
+      />
+    </div>
   );
 
   const renderContent = () => {
     switch (activePage) {
-      case "Dashboard": return renderDashboard();
-      case "Manage Students": return renderPeople("student");
-      case "Manage Faculty": return renderPeople("faculty");
-      case "Feedback Management": return renderFeedbackManagement();
-      case "Reports & Analytics": return renderReports();
-      case "My Profile": return renderProfile();
-      case "Settings": return renderSettings();
-      default: return null;
+      case "Dashboard":
+        return renderDashboard();
+      case "Manage Students":
+        return renderPeople("student");
+      case "Manage Faculty":
+        return renderPeople("faculty");
+      case "Feedback Management":
+        return renderFeedbackManagement();
+      case "Reports & Analytics":
+        return renderReports();
+      case "My Profile":
+        return renderProfile();
+      case "Settings":
+        return renderSettings();
+      default:
+        return null;
     }
   };
 
@@ -450,14 +462,20 @@ function AdminDashboard() {
         <nav className="space-y-3">
           {menuItems.map(item => {
             const Icon = item.icon;
+
             return (
               <button
                 key={item.name}
                 onClick={() => {
                   setActivePage(item.name);
                   setSearch("");
-                  if (item.name === "Feedback Management") loadFeedbacks();
-                  if (item.name === "Reports & Analytics") loadFeedbacks();
+
+                  if (
+                    item.name === "Feedback Management" ||
+                    item.name === "Reports & Analytics"
+                  ) {
+                    loadFeedbacks();
+                  }
                 }}
                 className={`w-full flex items-center gap-3 p-3 rounded-lg ${
                   activePage === item.name
@@ -494,6 +512,7 @@ function AdminDashboard() {
               <h2 className="text-xl font-bold dark:text-white">
                 Add {formType === "student" ? "Student" : "Faculty"}
               </h2>
+
               <button type="button" onClick={() => setShowForm(false)}>
                 <X className="dark:text-white" />
               </button>
@@ -503,7 +522,9 @@ function AdminDashboard() {
               required
               placeholder="Full Name"
               value={formData.name}
-              onChange={e => setFormData({ ...formData, name: e.target.value })}
+              onChange={e =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               className="w-full border rounded-lg p-3 dark:bg-slate-800 dark:text-white"
             />
 
@@ -512,15 +533,23 @@ function AdminDashboard() {
               type="email"
               placeholder="Email Address"
               value={formData.email}
-              onChange={e => setFormData({ ...formData, email: e.target.value })}
+              onChange={e =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               className="w-full border rounded-lg p-3 dark:bg-slate-800 dark:text-white"
             />
 
             <input
               required
-              placeholder={formType === "student" ? "Branch (e.g. CSE)" : "Department"}
+              placeholder={
+                formType === "student"
+                  ? "Branch (e.g. CSE)"
+                  : "Department"
+              }
               value={formData.department}
-              onChange={e => setFormData({ ...formData, department: e.target.value })}
+              onChange={e =>
+                setFormData({ ...formData, department: e.target.value })
+              }
               className="w-full border rounded-lg p-3 dark:bg-slate-800 dark:text-white"
             />
 
@@ -541,9 +570,11 @@ function StatCard({ icon: Icon, value, label }) {
   return (
     <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-md">
       <Icon className="text-blue-600 mb-4" size={32} />
+
       <h2 className="text-3xl font-bold text-slate-800 dark:text-white">
         {value}
       </h2>
+
       <p className="text-slate-500 mt-1">{label}</p>
     </div>
   );
@@ -553,6 +584,7 @@ function ProfileField({ label, value }) {
   return (
     <div className="border-b border-slate-200 dark:border-slate-700 py-4">
       <p className="text-sm text-slate-500 mb-1">{label}</p>
+
       <p className="font-semibold text-slate-800 dark:text-white">
         {value || "Not available"}
       </p>
