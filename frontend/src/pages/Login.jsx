@@ -392,7 +392,7 @@ function Login() {
     </p>
 
     <p  className="text-xs text-slate-400 mt-2">
-      Developed & Maintained By: <Team member 1- Anjali Verma ><Team Member 2- Anjali Singh >< CSE and 11 >
+      Developed &amp; Maintained By: Team Member 1 - Anjali Verma | Team Member 2 - Anjali Singh | CSE 11
     </p>
 
      <p  className="text-xs text-slate-400 mt-2">
