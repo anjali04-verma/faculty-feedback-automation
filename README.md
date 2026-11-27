@@ -9,6 +9,9 @@ The system provides separate dashboards for Students, Faculty, and Admin to mana
 
 ### 1. Login Page
 Users can log in using their email and password and select their role.
+Example- student-student@gmail.com   Password- student123
+         faculty-faculty@gmail.com   Password- faculty123
+         admin-admin@gmail.com       Password- admin123
 
 ### 2. Student Dashboard
 - View total faculty members.
