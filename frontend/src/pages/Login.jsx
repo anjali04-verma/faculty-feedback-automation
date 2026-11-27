@@ -391,6 +391,18 @@ function Login() {
       Designed to improve teaching and learning experiences.
     </p>
 
+    <p  className="text-xs text-slate-400 mt-2">
+      Developed & Maintained By: <Team member 1- Anjali Verma ><Team Member 2- Anjali Singh >< CSE and 11 >
+    </p>
+
+     <p  className="text-xs text-slate-400 mt-2">
+      Full Stack Development Team
+    </p>
+
+    <p className="text-xs text-slate-400 mt-2">
+     © 2026 ABESEC Ghaziabad. All Rights Reserved
+    </p>
+
   </footer>
 
  </section>
